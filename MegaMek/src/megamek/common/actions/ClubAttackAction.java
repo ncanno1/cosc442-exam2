@@ -126,15 +126,7 @@ public class ClubAttackAction extends PhysicalAttackAction {
 
         // TSM doesn't apply to some weapons, including Saws.
         if (entity.heat >= 9
-                && !(mType.hasSubType(MiscType.S_DUAL_SAW)
-                        || mType.hasSubType(MiscType.S_CHAINSAW)
-                        || mType.hasSubType(MiscType.S_PILE_DRIVER)
-                        || mType.isShield()
-                        || mType.hasSubType(MiscType.S_WRECKING_BALL)
-                        || mType.hasSubType(MiscType.S_FLAIL)
-                        || (mType.isVibroblade() && club.curMode().equals("Active"))
-                        || mType.hasSubType(MiscType.S_BUZZSAW)
-                        || mType.hasSubType(MiscType.S_CHAIN_WHIP))
+                && (!noTSM(mType) || !(mType.isVibroblade() && club.curMode().equals("Active")))
                 && ((Mech) entity).hasTSM()) {
             nDamage *= 2;
         }
@@ -156,6 +148,17 @@ public class ClubAttackAction extends PhysicalAttackAction {
     
     public static int calcnDamage(Entity entity, double divide, double add) {
     	return (int) (Math.ceil(entity.getWeight() / divide) + add);
+    }
+    
+    public static boolean noTSM(MiscType mType) {
+    	return (mType.hasSubType(MiscType.S_DUAL_SAW)
+                || mType.hasSubType(MiscType.S_CHAINSAW)
+                || mType.hasSubType(MiscType.S_PILE_DRIVER)
+                || mType.isShield()
+                || mType.hasSubType(MiscType.S_WRECKING_BALL)
+                || mType.hasSubType(MiscType.S_FLAIL)
+                || mType.hasSubType(MiscType.S_BUZZSAW)
+                || mType.hasSubType(MiscType.S_CHAIN_WHIP));
     }
 
     public ToHitData toHit(IGame game) {
