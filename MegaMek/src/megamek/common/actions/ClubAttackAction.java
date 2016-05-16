@@ -75,13 +75,13 @@ public class ClubAttackAction extends PhysicalAttackAction {
         MiscType mType = (MiscType) (club.getType());
         int nDamage = (int) Math.floor(entity.getWeight() / 5.0);
         if (mType.hasSubType(MiscType.S_SWORD)) {
-            nDamage = (int) (Math.ceil(entity.getWeight() / 10.0) + 1.0);
+            nDamage = calcnDamage(entity, 10.0, 1.0);
         } else if (mType.hasSubType(MiscType.S_MACE_THB)) {
             nDamage *= 2;
         } else if (mType.hasSubType(MiscType.S_RETRACTABLE_BLADE)) {
-            nDamage = (int) Math.ceil(entity.getWeight() / 10.0);
+            nDamage = calcnDamage(entity, 10.0, 0.0);
         } else if (mType.hasSubType(MiscType.S_MACE)) {
-            nDamage = (int) Math.floor(entity.getWeight() / 4.0);
+            nDamage = calcnDamage(entity, 4.0, 0.0);
         } else if (mType.hasSubType(MiscType.S_PILE_DRIVER)) {
             // Pile Drivers have constant damage, not variable like most.
             nDamage = 10;
@@ -116,7 +116,7 @@ public class ClubAttackAction extends PhysicalAttackAction {
                 }
             } else {
                 // when not active a vibro blade does normal sword damage
-                nDamage = (int) (Math.ceil(entity.getWeight() / 10.0) + 1.0);
+                nDamage = calcnDamage(entity, 10.0, 1.0);
             }
         }else if (mType.hasSubType(MiscType.S_CHAIN_WHIP)){
             nDamage = 3;
@@ -152,6 +152,10 @@ public class ClubAttackAction extends PhysicalAttackAction {
 
         return nDamage
                 + entity.getCrew().modifyPhysicalDamagaForMeleeSpecialist();
+    }
+    
+    public static int calcnDamage(Entity entity, double divide, double add) {
+    	return (int) (Math.ceil(entity.getWeight() / divide) + add);
     }
 
     public ToHitData toHit(IGame game) {
